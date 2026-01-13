@@ -1,4 +1,30 @@
 export default function Header () {
+
+    const date = new Date()
+
+    const today = date.toLocaleDateString("en-US", {
+            weekday: "long",
+            month: "long",
+            day: "numeric"
+    })
+
+    const timePeriod = date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        hour12: false,
+    })
+
+    let greetingTime;
+    if(timePeriod >= 5 && timePeriod <= 12){
+        greetingTime = "Morning"
+    }else if(timePeriod >= 1 && timePeriod <= 17){
+        greetingTime = "Afternoon"
+    }else if(timePeriod >= 18 && timePeriod <= 21){
+        greetingTime = "Evening"
+    } else{
+        greetingTime = "Night"
+    }
+
+    console.log(timePeriod)
     return (
          <header
             className="border-b border-neutral-800 bg-linear-to-b from-neutral-950 via-neutral-900/80 to-transparent"
@@ -16,7 +42,7 @@ export default function Header () {
                         className="flex flex-col gap-3 md:flex-row md:items-center"
                     >
                         <h1 className="text-4xl font-semibold tracking-tight">
-                            Good Morning, World!
+                            Good {greetingTime}, World!
                         </h1>
                         <span
                             className="inline-flex items-center gap-2 rounded-full border border-neutral-800/80 bg-neutral-900/70 px-4 py-1 text-xs font-medium text-neutral-300"
@@ -24,7 +50,7 @@ export default function Header () {
                             <span
                                 className="h-2 w-2 rounded-full bg-emerald-400"
                             ></span>
-                            Monday, Nov 10
+                            {today}
                         </span>
                     </div>
                     <p className="text-sm text-neutral-400 max-w-2xl">
