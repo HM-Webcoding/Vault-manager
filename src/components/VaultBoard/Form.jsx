@@ -1,4 +1,29 @@
-export default function Form() {
+import { useState } from "react"
+
+export default function Form({onSave}) {
+
+    const [newBookMark, setnewBookMark] = useState({
+        id: crypto.randomUUID(),
+        siteUrl: "",
+        favouriteColor: "",
+        category: "",
+        userName: "",
+        password: ""
+    })
+
+    const handleChange = (e) => {
+        let value = e.target.value
+        let name = e.target.name
+        setnewBookMark({
+            [name]: value
+        })
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+       onSave(newBookMark)
+    }
+
     return(
         <div className="max-w-7xl mx-auto mt-8 px-4">
             <form
@@ -29,6 +54,9 @@ export default function Form() {
                             <input
                                 type="url"
                                 placeholder="https://example.com"
+                                name="siteUrl"
+                                value={newBookMark.siteUrl}
+                                onChange={handleChange}
                                 className="w-full bg-transparent text-base text-white placeholder:text-neutral-500 focus:outline-none"
                             />
                             <span className="text-xs text-neutral-500"> Include https:// for best results. </span>
@@ -51,7 +79,9 @@ export default function Form() {
                                 </div>
                                 <input
                                     type="color"
-                                    value="#3b82f6"
+                                    name="favouriteColor"
+                                    value={newBookMark.favouriteColor}
+                                    onChange={handleChange}
                                     className="h-12 w-12 cursor-pointer rounded-full border border-neutral-700 bg-neutral-800 p-1 shadow-inner shadow-black/50"
                                 />
                             </div>
@@ -76,6 +106,9 @@ export default function Form() {
                                 Category
                             </span>
                             <select
+                                name="category"
+                                value={newBookMark.category}
+                                onChange={handleChange}
                                 className="w-full bg-transparent text-base text-white outline-none"
                             >
                                 <option className="bg-neutral-900 text-white">
@@ -124,6 +157,9 @@ export default function Form() {
                             <input
                                 type="text"
                                 placeholder="Enter username"
+                                name="userName"
+                                value={newBookMark.userName}
+                                onChange={handleChange}
                                 className="w-full bg-transparent text-base text-white placeholder:text-neutral-500 focus:outline-none"
                             />
                             <span className="text-xs text-neutral-500"
@@ -141,6 +177,9 @@ export default function Form() {
                             <input
                                 type="password"
                                 placeholder="Enter password"
+                                name="password"
+                                value={newBookMark.password}
+                                onChange={handleChange}
                                 className="w-full bg-transparent text-base text-white placeholder:text-neutral-500 focus:outline-none"
                             />
                             <span className="text-xs text-neutral-500"
@@ -164,6 +203,7 @@ export default function Form() {
                         </button>
                         <button
                             type="submit"
+                            onClick={handleSubmit}
                             className="w-full rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 md:w-auto">
                             Add Bookmark
                         </button>
