@@ -11,6 +11,39 @@ export default function Form({onSave}) {
         password: ""
     })
 
+    const [errors, setErrors] = useState({})
+
+    const valid = () => {
+        const newErrors = {}
+
+        if(!newBookMark.siteUrl){
+            newErrors.siteUrl = "website url required"
+        }try{
+            new URL(newBookMark.siteUrl)
+        }catch{
+            newErrors.siteUrl = "provide the valid url"
+        }
+
+        if(!newBookMark.favouriteColor){
+            newErrors.favouriteColor = "color is required"
+        }
+
+        if(!newBookMark.category){
+            newErrors.category = "category is required"
+        }
+        if(!newBookMark.userName){
+            newErrors.userName = "username is required"
+        }
+
+        if(!newBookMark.password){
+            newErrors.password = "password is required"
+        }else if (newBookMark.password.length < 6){
+            newErrors.password = "password must be in 6 character"
+        }
+
+        setErrors(newErrors)
+    }
+
     const handleChange = (e) => {
         let value = e.target.value
         let name = e.target.name
@@ -21,12 +54,17 @@ export default function Form({onSave}) {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+       if(!valid()) return
        onSave(newBookMark)
+       
     }
+
+    console.log(newBookMark)
 
     return(
         <div className="max-w-7xl mx-auto mt-8 px-4">
             <form
+                onSubmit={handleSubmit}
                 className="mb-10 rounded-2xl border border-neutral-800 bg-linear-to-br from-neutral-900/70 to-neutral-800/40 p-8 shadow-2xl shadow-black/40 backdrop-blur" >
                 <div className="mb-8 flex flex-col gap-3">
                     <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-400" >
@@ -60,6 +98,7 @@ export default function Form({onSave}) {
                                 className="w-full bg-transparent text-base text-white placeholder:text-neutral-500 focus:outline-none"
                             />
                             <span className="text-xs text-neutral-500"> Include https:// for best results. </span>
+                            <p className="text-red-600">{errors?.siteUrl}</p>
                         </label>
 
                         <div
@@ -82,23 +121,20 @@ export default function Form({onSave}) {
                                     name="favouriteColor"
                                     value={newBookMark.favouriteColor}
                                     onChange={handleChange}
-                                    className="h-12 w-12 cursor-pointer rounded-full border border-neutral-700 bg-neutral-800 p-1 shadow-inner shadow-black/50"
-                                />
+                                    className="h-12 w-12 cursor-pointer rounded-full border border-neutral-700 bg-neutral-800 p-1 shadow-inner shadow-black/50" />
                             </div>
                             <div
-                                className="mt-5 flex items-center gap-3 text-xs text-neutral-500"
-                            >
-                                <span
-                                    className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-neutral-700 bg-neutral-800/80 text-[10px] font-semibold uppercase text-neutral-400"
-                                >
+                                className="mt-5 flex items-center gap-3 text-xs text-neutral-500" >
+                                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-neutral-700 bg-neutral-800/80 text-[10px] font-semibold uppercase text-neutral-400" >
                                     Hex
                                 </span>
                                 <span>Matches any brand primary color.</span>
                             </div>
+                            <p className="text-red-600">{errors?.favouriteColor}</p>
                         </div>
 
                         <label
-                            className="flex flex-col gap-3 rounded-2xl border border-neutral-800 bg-neutral-900/60 p-5 text-sm transition focus-within:border-blue-500 focus-within:bg-neutral-900 focus-within:shadow-lg focus-within:shadow-blue-500/10"
+                            className={`flex flex-col gap-3 rounded-2xl border ${errors?.category ? 'border-red-500' : 'border-neutral-800'}bg-neutral-900/60 p-5 text-sm transition focus-within:border-blue-500 focus-within:bg-neutral-900 focus-within:shadow-lg focus-within:shadow-blue-500/10`}
                         >
                             <span
                                 className="text-xs font-semibold uppercase tracking-wider text-neutral-400"
@@ -142,13 +178,13 @@ export default function Form({onSave}) {
                             <span className="text-xs text-neutral-500">
                                 Helps you filter quicker later.
                             </span>
+                            <p className="text-red-600">{errors.category}</p>
                         </label>
                     </div>
 
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                         <label
-                            className="flex flex-col gap-3 rounded-2xl border border-neutral-800 bg-neutral-900/60 p-5 text-sm transition focus-within:border-blue-500 focus-within:bg-neutral-900 focus-within:shadow-lg focus-within:shadow-blue-500/10"
-                        >
+                            className={`flex flex-col gap-3 rounded-2xl border ${errors?.userName ? 'border-red-500' : 'border-neutral-800'} bg-neutral-900/60 p-5 text-sm transition focus-within:border-blue-500 focus-within:bg-neutral-900 focus-within:shadow-lg focus-within:shadow-blue-500/10`}>
                             <span
                                 className="text-xs font-semibold uppercase tracking-wider text-neutral-400"
                             >
@@ -162,8 +198,8 @@ export default function Form({onSave}) {
                                 onChange={handleChange}
                                 className="w-full bg-transparent text-base text-white placeholder:text-neutral-500 focus:outline-none"
                             />
-                            <span className="text-xs text-neutral-500"
-                                >Use workspace or personal handle.</span>
+                            <span className="text-xs text-neutral-500"> Use workspace or personal handle. </span>
+                            <p className="text-red-600">{errors?.userName}</p>
                         </label>
 
                         <label
@@ -184,6 +220,7 @@ export default function Form({onSave}) {
                             />
                             <span className="text-xs text-neutral-500"
                                 >Choose at least 6 characters.</span >
+                             <p className="text-red-600">{errors?.password}</p>
                         </label>
                     </div>
                 </div>
@@ -203,7 +240,6 @@ export default function Form({onSave}) {
                         </button>
                         <button
                             type="submit"
-                            onClick={handleSubmit}
                             className="w-full rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 md:w-auto">
                             Add Bookmark
                         </button>

@@ -26,7 +26,6 @@ export default function VaultBoard() {
             ...bookMarks,
             newBookMark
         ])
-        
     }
 
     return(
