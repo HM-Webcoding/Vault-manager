@@ -1,31 +1,31 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchFilter from "./SearchFilter";
 import VaultCard from "./VaultCard";
 import Form from "./Form";
+import { get } from "node:http";
 
 export default function VaultBoard() {
-    const defaultBookmark = {
-        id: crypto.randomUUID(),
-        siteUrl: "https://www.facebook.com",
-        favouriteColor: "#5545ff",
-        category: "social",
-        userName: ".doe@email.com",
-        password: "123456"
+ 
+    const storagekey = "bookmarks";
+    const getbookmarks = () => {
+       const data = localStorage.getItem(storagekey);
+        return data ? JSON.parse(data) : [];
     }
 
-    const [allBookmark, setAllBookmark] = useState([defaultBookmark])
-    const [bookMarks, setBookMarks] = useState([defaultBookmark])
+    const [allBookmark, setAllBookmark] = useState(getbookmarks());
+    const [bookMarks, setBookMarks] = useState(getbookmarks());
+    
+
+    const saveBookmarks = (bookmarks) => {
+        localStorage.setItem(storagekey, JSON.stringify(bookmarks));
+    }
 
     const handleNewBookmark = (newBookMark) => {
-        setAllBookmark([
-            ...allBookmark,
-            newBookMark
-        ])
-        setBookMarks([
-            ...bookMarks,
-            newBookMark
-        ])
+        let updatedBookmarks = [...allBookmark, newBookMark];
+        setAllBookmark(updatedBookmarks);
+        setBookMarks(updatedBookmarks);
+        saveBookmarks(updatedBookmarks);
     }
 
     return(
