@@ -1,68 +1,79 @@
 import { useState } from "react"
 
-export default function Form({onSave}) {
+export default function Form({ onSave }) {
 
-    const [newBookMark, setnewBookMark] = useState({
-        id: crypto.randomUUID(),
+    const initialState = {
         siteUrl: "",
         favouriteColor: "",
         category: "",
         userName: "",
         password: ""
-    })
+    }
+
+    const [newBookMark, setnewBookMark] = useState(initialState)
 
     const [errors, setErrors] = useState({})
 
     const valid = () => {
         const newErrors = {}
-
-        if(!newBookMark.siteUrl){
+        if (!newBookMark.siteUrl) {
             newErrors.siteUrl = "website url required"
-        }try{
+        } else try {
             new URL(newBookMark.siteUrl)
-        }catch{
+        } catch {
             newErrors.siteUrl = "provide the valid url"
         }
 
-        if(!newBookMark.favouriteColor){
+        if (!newBookMark.favouriteColor) {
             newErrors.favouriteColor = "color is required"
         }
 
-        if(!newBookMark.category){
+        if (!newBookMark.category) {
             newErrors.category = "category is required"
         }
-        if(!newBookMark.userName){
+        if (!newBookMark.userName) {
             newErrors.userName = "username is required"
         }
 
-        if(!newBookMark.password){
+        if (!newBookMark.password) {
             newErrors.password = "password is required"
-        }else if (newBookMark.password.length < 6){
+        } else if (newBookMark.password.length < 6) {
             newErrors.password = "password must be in 6 character"
         }
 
         setErrors(newErrors)
+        return Object.keys(newErrors).length === 0
+
     }
 
     const handleChange = (e) => {
         let value = e.target.value
         let name = e.target.name
         setnewBookMark({
+            ...newBookMark,
             [name]: value
         })
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
-       if(!valid()) return
-       onSave(newBookMark)
-       
+        if (!valid()) return
+        if (typeof onSave !== "function") return
+        onSave({
+            ...newBookMark,
+            id: crypto.randomUUID()
+        })
+        setnewBookMark(initialState)
+        setErrors({})
     }
 
-    console.log(newBookMark)
+    const handleReset = () => {
+        setnewBookMark(initialState)
+        setErrors({})
+    }
 
-    return(
-        <div className="max-w-7xl mx-auto mt-8 px-4">
+    return (
+        <div className="max-w-7xl mx-auto mt-8 px-4" >
             <form
                 onSubmit={handleSubmit}
                 className="mb-10 rounded-2xl border border-neutral-800 bg-linear-to-br from-neutral-900/70 to-neutral-800/40 p-8 shadow-2xl shadow-black/40 backdrop-blur" >
@@ -219,8 +230,8 @@ export default function Form({onSave}) {
                                 className="w-full bg-transparent text-base text-white placeholder:text-neutral-500 focus:outline-none"
                             />
                             <span className="text-xs text-neutral-500"
-                                >Choose at least 6 characters.</span >
-                             <p className="text-red-600">{errors?.password}</p>
+                            >Choose at least 6 characters.</span >
+                            <p className="text-red-600">{errors?.password}</p>
                         </label>
                     </div>
                 </div>
@@ -233,6 +244,7 @@ export default function Form({onSave}) {
                     </div>
                     <div className="flex flex-1 justify-end gap-3">
                         <button
+                            onClick={handleReset}
                             type="reset"
                             className="w-full rounded-full border border-neutral-700 px-6 py-3 text-sm font-semibold text-neutral-200 transition hover:border-neutral-500 hover:text-white md:w-auto"
                         >
@@ -246,6 +258,6 @@ export default function Form({onSave}) {
                     </div>
                 </div>
             </form>
-    </div>
+        </div >
     )
 }
