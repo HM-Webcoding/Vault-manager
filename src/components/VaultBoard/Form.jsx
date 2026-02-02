@@ -130,7 +130,7 @@ export default function Form({ onSave }) {
                                 <input
                                     type="color"
                                     name="favouriteColor"
-                                    value={newBookMark.favouriteColor}
+                                    value={newBookMark.favouriteColor || "#000000"}
                                     onChange={handleChange}
                                     className="h-12 w-12 cursor-pointer rounded-full border border-neutral-700 bg-neutral-800 p-1 shadow-inner shadow-black/50" />
                             </div>

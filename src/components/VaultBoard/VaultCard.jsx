@@ -1,23 +1,26 @@
-export default function VaultCard({bookMarks}) {
-    return(
+
+
+export default function VaultCard({ bookMarks }) {
+
+    return (
         <>
-        {
-            bookMarks.map((bookMark)=> (
-                <article
-                    key={bookMark.id}
-                    style={{ "--favColor": bookMark.favouriteColor }}
-                    className="rounded-3xl border border-neutral-800 bg-neutral-900/70 p-6 shadow-2xl shadow-black/30 transition hover:-translate-y-1 hover:border-(--favColor) hover:shadow-blue-500/20">
+            {
+                bookMarks.map((bookMark) => (
+                    <article
+                        key={bookMark.id}
+                        style={{ "--favColor": bookMark.favouriteColor }}
+                        className="rounded-3xl border border-neutral-800 bg-neutral-900/70 p-6 shadow-2xl shadow-black/30 transition hover:-translate-y-1 hover:border-(--favColor) hover:shadow-blue-500/20">
                         <div className="flex items-start justify-between">
                             <div className="flex items-center gap-4">
                                 <div
-                                style={{color: bookMark.favouriteColor}}
+                                    style={{ color: bookMark.favouriteColor }}
                                     className={`flex h-12 w-12 items-center justify-center rounded-2xl border border-neutral-800`}
                                 >
                                     Fb
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-semibold">
-                                        Facebook
+                                        {new URL(bookMark.siteUrl).hostname.replace(/^www\./, "").split('.')[0]}
                                     </h3>
                                     <p
                                         className="text-xs uppercase tracking-wide text-neutral-500"
@@ -40,7 +43,7 @@ export default function VaultCard({bookMarks}) {
                                     {bookMark.userName}
                                 </dt>
                                 <dd className="text-neutral-50">
-                                   {bookMark.userName}
+                                    {bookMark.userName}
                                 </dd>
                             </div>
                             <div
@@ -63,10 +66,10 @@ export default function VaultCard({bookMarks}) {
                                 </dd>
                             </div>
                         </dl>
-        </article>
-            ))
-        }
-        
+                    </article>
+                ))
+            }
+
         </>
     )
 }
