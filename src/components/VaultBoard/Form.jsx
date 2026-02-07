@@ -61,7 +61,8 @@ export default function Form({ onSave }) {
         if (typeof onSave !== "function") return
         onSave({
             ...newBookMark,
-            id: crypto.randomUUID()
+            id: crypto.randomUUID(),
+            createdAt: new Date().toISOString()
         })
         setnewBookMark(initialState)
         setErrors({})

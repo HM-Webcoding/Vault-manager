@@ -1,6 +1,14 @@
-
+import { useState } from "react";
 
 export default function VaultCard({ bookMarks }) {
+    const [passwordVisible, setPasswordVisible] = useState({});
+
+    const handleReveal = (id) => {
+        setPasswordVisible(prev => ({
+            ...prev,
+            [id]: !prev[id],
+        }));
+    };
 
     return (
         <>
@@ -57,9 +65,10 @@ export default function VaultCard({ bookMarks }) {
                                 <dd
                                     className="flex items-center gap-2 text-neutral-50"
                                 >
-                                    <span>{bookMark.password}</span>
+                                    <span> {passwordVisible[bookMark.id] ? bookMark.password : "••••••••"} </span>
                                     <button
                                         className="text-xs font-semibold text-(--favColor)"
+                                        onClick={() => handleReveal(bookMark.id)}
                                     >
                                         Reveal
                                     </button>
