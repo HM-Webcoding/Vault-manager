@@ -36,7 +36,7 @@ export default function Header () {
                     <p
                         className="text-xs font-semibold uppercase tracking-[0.4em] text-blue-400"
                     >
-                        Vault overview
+                        Vault manager
                     </p>
                     <div
                         className="flex flex-col gap-3 md:flex-row md:items-center"
